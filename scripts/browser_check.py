@@ -132,7 +132,7 @@ def main():
 
             def settle():
                 page.wait_for_timeout(250)
-                page.wait_for_function("document.querySelector('#job-bar').hidden", timeout=30000)
+                page.locator("#job-bar").wait_for(state="hidden", timeout=30000)
                 page.wait_for_timeout(200)
                 faults = page.locator(".toast.error").all_text_contents()
                 if faults:

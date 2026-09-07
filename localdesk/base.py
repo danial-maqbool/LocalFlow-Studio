@@ -81,7 +81,7 @@ class BaseApplication:
             raise InputError("The output file is not available.")
         return {
             "name": path.name,
-            "path": str(path.relative_to(self.exports)),
+            "path": path.relative_to(self.exports).as_posix(),
             "size": path.stat().st_size,
         }
 

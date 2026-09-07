@@ -135,7 +135,12 @@ def regex_field(pattern: str, text: str) -> str:
         raise InputError(f"The extraction pattern is invalid: {exc}") from exc
     try:
         result = subprocess.run(
-            [sys.executable, "-m", "localdesk.regex_worker"],
+            [
+                sys.executable,
+                "-I",
+                "-S",
+                str(Path(__file__).resolve().parents[1] / "localdesk" / "regex_worker.py"),
+            ],
             input=json.dumps({"pattern": pattern, "text": text[:16_000]}),
             text=True,
             capture_output=True,
