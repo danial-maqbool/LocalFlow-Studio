@@ -1,0 +1,28 @@
+{
+  "project": "LocalFlow-Studio",
+  "browser": "143.0.7499.4",
+  "mode": "direct loopback navigation",
+  "checks": [
+    "Main view renders",
+    "All 17 workflow node types are available",
+    "OCR, tables, semantic, summary, and desktop controls exist",
+    "Workflow preview completes",
+    "Workflow output artifacts are listed",
+    "Workflow definition can be saved",
+    "Node settings can be selected",
+    "Navigation: Workflow builder",
+    "Navigation: Run history",
+    "Navigation: Triggers",
+    "Navigation: Step guide",
+    "Dark theme control works",
+    "Mobile viewport has no page-wide overflow",
+    "No uncaught browser errors",
+    "No external browser network request",
+    "Closing the browser leaves the worker running",
+    "Worker health remains available after browser close"
+  ],
+  "passed": 17,
+  "errors": [],
+  "seconds": 9.895,
+  "media": "Actual recorded application states, not mockups. GIF timing is illustrative."
+}

@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "A real worker accepts an explicit folder trigger",
+    "Client disconnect does not stop the worker",
+    "Encrypted trigger configuration resumes after restart",
+    "A change made while stopped creates new outputs after restart",
+    "The durable database is ciphertext",
+    "An explicitly stopped trigger stays stopped after restart"
+  ],
+  "passed": 6,
+  "native_service_installation_tested": false
+}

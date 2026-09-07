@@ -1,0 +1,22 @@
+[
+  {
+    "frame": 1,
+    "caption": "Start with a local workspace",
+    "duration_ms": 1800
+  },
+  {
+    "frame": 2,
+    "caption": "Preview the six-step invoice workflow",
+    "duration_ms": 1800
+  },
+  {
+    "frame": 3,
+    "caption": "Create three invoice copies, a CSV, and a run report",
+    "duration_ms": 1800
+  },
+  {
+    "frame": 4,
+    "caption": "Inspect extraction settings",
+    "duration_ms": 1800
+  }
+]

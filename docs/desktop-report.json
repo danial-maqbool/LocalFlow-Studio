@@ -1,0 +1,6 @@
+{
+  "backend": "PyAutoGUI and Tk",
+  "typed_text_verified": true,
+  "mouse_click_verified": true,
+  "fail_safe_enabled": true
+}

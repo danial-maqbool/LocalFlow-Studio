@@ -1,0 +1,83 @@
+{
+  "repository": "LocalFlow-Studio",
+  "version": "0.2.0",
+  "python": "3.11.9",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "tests_run": 125,
+  "passed": 121,
+  "failures": [],
+  "errors": [],
+  "skipped": [
+    {
+      "test": "tests.test_advanced_common.AdvancedCommonTests.test_actual_scanned_pdf_ocr",
+      "reason": "Tesseract is required for this OCR integration test."
+    },
+    {
+      "test": "tests.test_advanced_common.AdvancedCommonTests.test_actual_tesseract_image_ocr",
+      "reason": "Tesseract is required for this OCR integration test."
+    },
+    {
+      "test": "tests.test_advanced_common.AdvancedCommonTests.test_mixed_pdf_keeps_native_header_and_scanned_content",
+      "reason": "Tesseract is required for this mixed-page OCR test."
+    },
+    {
+      "test": "tests.test_upgrade.UpgradeTests.test_ocr_to_extracted_field",
+      "reason": "Tesseract integration dependency."
+    }
+  ],
+  "seconds": 68.16,
+  "packages": {
+    "cryptography": "50.0.0",
+    "keyring": "25.7.0",
+    "Pillow": "12.3.0",
+    "pypdf": "6.17.0",
+    "pdfplumber": "0.11.10",
+    "pdfminer.six": "20260107",
+    "pypdfium2": "5.13.0",
+    "numpy": "2.3.5",
+    "scikit-learn": "1.9.0"
+  },
+  "tools": {
+    "tesseract": false,
+    "ffmpeg": false,
+    "ffprobe": false
+  },
+  "source_sha256": {
+    "app/__init__.py": "2bba0c63737d5e145db2e08d996a44183ccc621b0dd0ac091246b075d46d359f",
+    "app/engine.py": "79fefee0d614bd92ba4b3da17d3192e1e974615b14de663d857d8956e3309810",
+    "app/legacy.py": "7d4bcd1663ed8b609c06d2db18a03518e7c71db516932596e69182efe5e03d58",
+    "app/service.py": "6bbc2ce3a65bd2f1036756d7f7a19b1ccbb286462a59afdb459099357eefb354",
+    "localdesk/__init__.py": "b7b1b5feb9aafcd71ab8d8021727bfebab3f16263639ed62ef054a7827f23032",
+    "localdesk/base.py": "723f4a3d85304b46b4a890fec9f6426212a2e4f8adabb281e178b1d736fc8909",
+    "localdesk/credentials.py": "d21c57bfc4705bbaa2760d446c4485325f198bc93c7d8cc0996e95ada96a5347",
+    "localdesk/desktop.py": "0d3a3acdc36bd65b41fc9cf3d3cfc4e997489d3740d3f500565e825ad102bcda",
+    "localdesk/document_worker.py": "b30a043c937610777aff8edb84e7565645a3a2476d537c25faa33759a0d0acfd",
+    "localdesk/documents.py": "9a087a0753757b3f088dc03028f2567c056048be68a807062e36eba37b8823be",
+    "localdesk/jobs.py": "ad385f01753204738cf8678154bffe88c74b691d9f5151b47cbef6051ec5115f",
+    "localdesk/parsers.py": "c55d8391e2ece7c4791ea0ebe89b32fd62db252d4198c790492435edb9593b7a",
+    "localdesk/pdf_worker.py": "d54e289772d3995fc8146a1e57267911d60affb39f19ae39215cfe55121d6335",
+    "localdesk/regex_worker.py": "0da8f18b7617a9391df14c67051200583116dac78b4fec858b582ed230e6b55e",
+    "localdesk/safety.py": "d55ad7fe20dbaddda3e8b83d2c3ceb7ae572a7fd1cddf23aac538502f6145cf5",
+    "localdesk/semantic.py": "a377f56643a75f31570f16a20e6aafe6a6137f5ae81dc4a3755e86036becb062",
+    "localdesk/server.py": "fef9995e0111f452620953a86621f1ee590c2e158375660a868f161796e55059",
+    "localdesk/services.py": "38c52b2961688048c6cc78e73c04ff83c64ed48fdd7b9bb0c532607a2abda178",
+    "localdesk/storage.py": "36d60fa46adcdf4d31ff960079ff369fe0c354b930efe4cafb20ded9ba127de6",
+    "localdesk/vault.py": "6d206e22bd520460bf8a6ff067c5827d55a3f5752426d5f34855bea7480a1d7b",
+    "web/app.js": "49f089d9470360c820cf73dff6832e0d163f47b8c8e25cbf81714a989420d9a3",
+    "web/common.js": "60555fee5e603be53603e7dd75617a89f5248233eabab8fa7fdcffa1a3b9d7bf",
+    "web/index.html": "9df3fd0d7e346501fe866c3a3f53b9d2498909ad0c4de690546a0936ca41122e",
+    "web/style.css": "acde3100149099b06ffc796be508d5005f843139acc8e083c776f4244ba94c1a",
+    "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/fixtures.py": "9afbf79cf27eb6b401abb9ab68cd18e5e879515f64ca876becfb3097d724e0d8",
+    "tests/support.py": "c99d26cbb11e729a1e171c8fdd9151765b9469f7d20ab8123cabd824b9655063",
+    "tests/test_advanced_common.py": "0423430cae7d6447ba3a7853bed1330a2782434d74af4329062d8a4877271817",
+    "tests/test_http.py": "390e97bd6ebe0a80737abd450576b2307b93d95c943a58b266e7782d51351c5d",
+    "tests/test_portability.py": "1b0db0afffa20076b41d75381cf9632d456af70bad206e5c03959c7e93fed1e0",
+    "tests/test_safety.py": "a5fa7a08ff162048ec1ed13ed32e3da1dd5785a507f6aae9cbc8aa833f53e5e0",
+    "tests/test_upgrade.py": "792df5c3dc2bcdcb0c0f3c3f2abb143de92d9115ac2fd2d8001d2ef4db15df64",
+    "tests/test_vault.py": "fa2f2c4013c58298097ecec991058a1ebe90312bef8ea2b2b41aafdbb1b4c022",
+    "tests/test_workflows.py": "bf8e247bcd14510bc444a8f83a76d301be69057797dbf530b1699d3209789030"
+  },
+  "github_run_id": "34099505428",
+  "github_commit": "3cb8f9ac9471fa04038c15ccaff6e726077a62cf"
+}
