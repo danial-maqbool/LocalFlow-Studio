@@ -1,0 +1,7 @@
+Invoice: INV-1001
+Supplier: Northline Paper Co.
+Date: 2026-09-01
+Description: Recycled printer paper, 12 boxes
+Amount: 148.00
+Currency: USD
+This file contains synthetic demo data.

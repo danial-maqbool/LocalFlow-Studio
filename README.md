@@ -1,165 +1,181 @@
 # LocalFlow Studio
 
-A local workflow builder for repetitive file work.
+Repeat file work without repeating every click.
 
-**No API keys. No account. No cloud service. No model download. Python 3.11+ only.**
+**Local processing. No API keys. No account. CPU operation. Encrypted app database.**
 
-![LocalFlow Studio interface](docs/assets/interface.svg)
+[![Tests](https://github.com/danial-maqbool/LocalFlow-Studio/actions/workflows/tests.yml/badge.svg)](https://github.com/danial-maqbool/LocalFlow-Studio/actions/workflows/tests.yml)
+![Version](https://img.shields.io/badge/version-0.2.0-345adb)
+![Python](https://img.shields.io/badge/Python-3.11%2B-3776ab)
+![License](https://img.shields.io/badge/license-MIT-2e805b)
 
-## Why I built it
+![Recorded LocalFlow Studio workflow](docs/assets/demo.gif)
 
-Small file tasks become repetitive very quickly. Rename a folder of invoices. Extract one value from each file. Create clean copies. Build a CSV register. Repeat the same work next week.
+The recording uses synthetic example data. It shows the working interface, not a mockup.
 
-LocalFlow turns that process into a saved workflow. You can inspect the plan before the app writes anything.
+## Why this exists
 
-## What it can do
+An invoice arrives as a scan. Read it with OCR, extract an invoice ID, create a named copy, and add a row to a register. Save the workflow for the next folder.
 
-| Step | Purpose |
-| --- | --- |
-| Read folder | Find files inside a selected workspace |
-| Filter files | Keep files that match a file pattern |
-| Read text | Read local UTF-8 text files |
-| Extract field | Capture a value with a regular expression |
-| Set output name | Build a new file name from extracted fields |
-| Copy files | Create new copies without changing source files |
-| Write CSV | Build a register from workflow fields |
-| Create ZIP | Pack selected files into a new archive |
+## What you can do
 
-The first public release keeps the workflow engine small on purpose. It does not run shell commands, arbitrary Python, mouse actions, or keyboard actions.
+| Feature | Behavior |
+| :--- | :--- |
+| **Document OCR** | Read images and scanned PDFs with local Tesseract. Keep word positions and recognition notes. |
+| **PDF tables** | Extract ruled or text-aligned tables. Use OCR with explicit column boundaries for scanned tables. |
+| **Local semantic model** | Rank workflow records with a model fitted on the current text. Filter by cosine similarity. |
+| **Source summaries** | Select representative source sentences. No cloud prompt or generated factual claims. |
+| **Desktop actions** | Preview and confirm mouse, keyboard, scroll, wait, and screenshot actions for one interactive run. |
+| **Persistent triggers** | Resume enabled folder watches and interval jobs after unlocking. Install a user worker for login startup. |
+| **Encrypted history** | Save workflow revisions and job history in an authenticated encrypted vault. |
+| **File operations** | Filter, extract fields, set output names, create copies, export CSV/JSON, and create ZIP files. |
 
-## Run it
+## The six changes from the first public release
 
-### Windows
+| Earlier restriction | Version 0.2.0 |
+| :--- | :--- |
+| No OCR | Tesseract image and scanned-PDF steps. |
+| No PDF tables | Native tables, OCR rows, and explicit column boundaries. |
+| No semantic model | Local latent semantic analysis, similarity filtering, and source summaries. |
+| Browser-bound watching | Independent worker, saved trigger state, and user-service definitions. |
+| No mouse or keyboard actions | Per-run confirmation, input actions, screenshots, and a corner stop. |
+| Plain SQLite file | Password-derived AES-256-GCM vault with encrypted backups. |
 
-Install Python 3.11 or newer. Then double-click:
+The worker still needs an awake computer. Desktop actions need an unlocked supported graphical session.
+These are OS conditions, not background cloud services.
 
-```text
+## Start on your PC
+
+Install Python 3.11 or later. Download this repository or clone it:
+
+```sh
+git clone https://github.com/danial-maqbool/LocalFlow-Studio.git
+cd LocalFlow-Studio
+```
+
+**Windows**
+
+```powershell
+py -3 bootstrap.py
 start.bat
 ```
 
-### Linux or macOS
+**Linux or macOS**
 
 ```sh
+python3 bootstrap.py
 sh start.sh
 ```
 
-### Any platform
+Setup creates `.venv` inside this folder. It does not change system Python packages.
+The first normal start asks for a vault passphrase with at least 12 characters.
+Keep the passphrase. There is no password-reset server.
+The browser opens the local app on `127.0.0.1:8761`.
+
+To try synthetic data without keeping a database:
 
 ```sh
-python run.py
+# Windows
+start.bat --demo
+
+# Linux or macOS
+sh start.sh --demo
 ```
 
-Open `http://127.0.0.1:8761` if the browser does not open by itself.
+Demo data disappears when the process stops. Demo mode cannot create a recoverable database backup.
 
-You do not need `pip install` for the core app.
+### Install the local tools
 
-## Try the included example
+Python setup installs PDF, image, encryption, and semantic-model packages.
+OCR also needs the Tesseract executable and local language data.
+Desktop input needs the optional package set:
 
-The repository includes two synthetic invoices and one workflow.
+```sh
+python bootstrap.py --desktop
+```
 
-1. Start LocalFlow.
-2. Select **Preview plan**.
-3. Check the extracted invoice IDs and planned records.
-4. Select **Create outputs**.
-5. LocalFlow creates renamed copies and `register.csv` under `.localflow/outputs/`.
+Read [Setup](docs/SETUP.md) for OS commands, permissions, offline installation, and troubleshooting.
+A one-time package installation can use the internet. Normal app processing does not contact a service.
+No AI model weights are downloaded automatically.
 
-The example does not contain real personal or business data.
+## Keep a worker running
 
-## Local design
+Closing the browser does not stop the Python worker. Enable a watcher or trigger inside the app first.
+To start that worker at user login, stop the foreground app and run:
+
+```sh
+# Use .venv\Scripts\python.exe on Windows.
+.venv/bin/python run.py service --install
+```
+
+This command saves the vault password in a supported OS credential store.
+It installs one service for the current user. It does not request administrator rights.
+The service never enables desktop mouse or keyboard actions.
+Use `service --remove` to remove the service and its saved credential.
+See [Background operation](docs/BACKGROUND.md).
+
+## Where your data goes
+
+| Location | Contents |
+| :--- | :--- |
+| `.local-data/app.vault` | Encrypted database snapshot. |
+| `.local-data/inbox/` | Files that you upload or paste into the app. |
+| `.local-data/exports/` | New outputs and reports. |
+| OS credential store | Vault password only when you install a service. |
+
+The database uses AES-256-GCM with a passphrase-derived key. SQLite operates in memory.
+Backups use the same authenticated vault format. Source files, exports, and parser temporary files are not encrypted by this app.
+Use OS disk encryption to protect the whole computer.
+
+Read [Security](SECURITY.md) before processing sensitive data.
+For an existing installation, follow [Upgrade and migration](docs/UPGRADING.md).
+
+## Design
 
 ```mermaid
 flowchart LR
-  UI[Browser editor] --> API[Local Python server]
-  API --> ENGINE[Workflow engine]
-  ENGINE --> INPUT[Selected folder]
-  ENGINE --> OUTPUT[New output files]
-  API --> DB[(SQLite run history)]
+    A[Browser interface] --> B[Loopback API and session checks]
+    B --> C[Bounded job queue]
+    C --> D[Local file and document tools]
+    D --> E[New output copies]
+    C --> F[In-memory SQLite]
+    F --> G[Authenticated encrypted vault]
 ```
 
-The browser talks only to the Python process on your PC. The app does not call an external API.
-
-Read [the architecture notes](docs/ARCHITECTURE.md) for the file and data flow.
-
-## Safety rules
-
-LocalFlow uses a few strict rules:
-
-- It binds to localhost.
-- It skips symbolic links during scans.
-- It checks that source paths stay inside the selected workspace.
-- It checks file hashes again before some operations.
-- It writes generated files to a separate output folder.
-- It never evaluates code from a workflow.
-- It limits each scanned file to 25 MiB in this release.
-- CSV values that start like spreadsheet formulas get a leading apostrophe.
-
-These controls reduce risk. They do not replace normal backups or file review.
-
-Read [SECURITY.md](SECURITY.md) before you use sensitive files.
-
-## Test it
-
-```sh
-python -m unittest discover -s tests -v
-```
-
-The test suite checks workflow validation, preview mode, copy and CSV output, source-file preservation, unsafe output names, the local status API, and the web entry page.
-
-GitHub Actions runs the tests on Ubuntu, Windows, and macOS with Python 3.11, 3.12, and 3.13.
-
-## Repository map
+`app/` holds the project logic. `localdesk/` holds reusable local runtime components.
+Every repository includes its own copy. No other repository is required at runtime.
 
 ```text
-LocalFlow-Studio/
-├── localflow/
-│   ├── engine.py       # workflow validation and execution
-│   └── server.py       # local HTTP API and SQLite history
-├── web/
-│   ├── index.html      # interface shell
-│   ├── app.js          # workflow UI
-│   └── style.css       # local styles
-├── examples/
-│   ├── workflow.json   # reusable example workflow
-│   └── inbox/          # synthetic input files
-├── tests/              # standard-library tests
-├── docs/               # architecture and media
-├── run.py              # application entry point
-├── start.bat           # Windows launcher
-└── start.sh            # Linux and macOS launcher
+app/          Project operations and validation
+localdesk/    HTTP, jobs, vault, OCR/PDF, semantic model, and user services
+web/          HTML, CSS, and JavaScript with no CDN dependencies
+examples/     Synthetic files for the first run
+scripts/      Browser checks and release checks
+tests/        Unit, integration, and adversarial regression tests
+docs/         Setup, architecture, API, evidence, and recorded media
 ```
 
-## Reuse it
+## Verify a change
 
-Workflow files are plain JSON. The engine is a normal Python module. You can import it without starting the browser UI.
-
-```python
-from pathlib import Path
-from localflow.engine import WorkflowEngine, load_workflow
-
-workflow = load_workflow(Path("examples/workflow.json"))
-result = WorkflowEngine(
-    Path("examples/inbox"),
-    Path("my-output"),
-).run(workflow)
-
-print(result.outputs)
+```sh
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python scripts/browser_check.py
 ```
 
-This makes the engine useful in scripts, scheduled local jobs, and other desktop tools.
+Replace `.venv/bin/python` with `.venv\Scripts\python.exe` on Windows.
+The browser check needs a Playwright browser installed once.
+Use `python -m playwright install chromium` in the virtual environment.
 
-## Current limits
+Read [Verification](docs/VERIFICATION.md) and [Security review](docs/SECURITY_REVIEW.md).
+The reports distinguish real integration tests from mocked permission checks and untested OS setup paths.
+Passing tests does not prove that every possible file or desktop environment will work.
 
-Version 0.1.0 focuses on safe text-file workflows.
+## Documentation
 
-- It does not include OCR.
-- It does not include PDF table extraction.
-- It does not include semantic search or an AI model.
-- It does not watch folders after the app closes.
-- It does not provide general desktop mouse or keyboard automation.
-- It does not encrypt `.localflow/localflow.db`.
-
-These limits are explicit so users can tell what the current release actually does.
+[User guide](docs/USER_GUIDE.md) · [Setup](docs/SETUP.md) · [Architecture](docs/ARCHITECTURE.md) · [API](docs/API.md) · [Processing boundaries](docs/LIMITS.md) · [Contributing](CONTRIBUTING.md)
 
 ## License
 
 MIT. See [LICENSE](LICENSE).
+Third-party tools and optional model weights keep their own licenses. See [Sources](docs/SOURCES.md).

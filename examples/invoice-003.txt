@@ -1,0 +1,7 @@
+Invoice: INV-1003
+Supplier: River Office Services
+Date: 2026-09-05
+Description: Monthly equipment maintenance
+Amount: 210.00
+Currency: USD
+This file contains synthetic demo data.

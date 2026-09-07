@@ -1,9 +1,11 @@
 [project]
 name = "localflow-studio"
-version = "0.1.0"
-description = "A fully local file workflow builder"
+version = "0.2.0"
+description = "Build repeatable file workflows. Keep every step on your PC."
 requires-python = ">=3.11"
-license = {text = "MIT"}
+license = "MIT"
 
-[tool.unittest]
-start-directory = "tests"
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
