@@ -5,6 +5,7 @@ or read a real credential store. It verifies the worker used by that service.
 """
 
 from __future__ import annotations
+import argparse
 import hashlib
 import json
 import os
@@ -21,6 +22,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--report-dir", type=Path, default=ROOT / "docs")
+    args = parser.parse_args()
+    report_dir = args.report_dir.expanduser()
+    if not report_dir.is_absolute():
+        report_dir = ROOT / report_dir
+    report_dir.mkdir(parents=True, exist_ok=True)
+    (report_dir / "worker-report.json").unlink(missing_ok=True)
     checks = []
     with tempfile.TemporaryDirectory(prefix="localflow-worker-check-") as temp:
         work = Path(temp)
@@ -140,7 +149,7 @@ def main():
         finally:
             stop()
     report = {"checks": checks, "passed": len(checks), "native_service_installation_tested": False}
-    (ROOT / "docs/worker-report.json").write_text(json.dumps(report, indent=2) + "\n")
+    (report_dir / "worker-report.json").write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))
 
 
