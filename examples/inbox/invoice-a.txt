@@ -1,3 +1,0 @@
-Invoice ID: INV-2026-001
-Vendor: Northwind Tools
-Total: 129.50

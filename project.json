@@ -1,0 +1,22 @@
+{
+  "name": "LocalFlow Studio",
+  "repository": "LocalFlow-Studio",
+  "slug": "localflow",
+  "tagline": "Build repeatable file workflows. Keep every step on your PC.",
+  "port": 8761,
+  "color": "#3167e8",
+  "version": "0.2.0",
+  "description": "Turn a folder of files into a repeatable process. Inspect each step before the app creates a copy.",
+  "topics": [
+    "python",
+    "local-first",
+    "offline",
+    "sqlite",
+    "self-hosted",
+    "workflow-automation",
+    "visual-programming",
+    "file-management",
+    "dag",
+    "csv"
+  ]
+}

@@ -1,0 +1,7 @@
+Invoice: INV-1002
+Supplier: Clear Desk Supplies
+Date: 2026-09-03
+Description: Desk labels and storage trays
+Amount: 86.50
+Currency: USD
+This file contains synthetic demo data.
