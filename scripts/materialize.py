@@ -26,7 +26,11 @@ def safe_target(name: str) -> Path:
     return target
 
 
-def digest(raw: bytes) -> str:
+def digest(raw: bytes, name: str = '') -> str:
+    # Git stores canonical LF text but checks .bat files out with CRLF.
+    # Normalize only that declared text format. Binary fixture bytes stay exact.
+    if name.endswith('.bat'):
+        raw = raw.replace(b'\r\n', b'\n')
     return hashlib.sha256(raw).hexdigest()
 
 
@@ -37,7 +41,7 @@ def main() -> None:
     manifest = json.loads(MANIFEST.read_text())
     files = manifest['files']
     if args.refresh:
-        manifest['files'] = {name: digest(safe_target(name).read_bytes()) for name in files}
+        manifest['files'] = {name: digest(safe_target(name).read_bytes(), name) for name in files}
         MANIFEST.write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
         return
     source = manifest.get('shared_source')
@@ -51,14 +55,14 @@ def main() -> None:
             url = 'https://raw.githubusercontent.com/' + source['repository'] + '/' + source['commit'] + '/' + name
             with urllib.request.urlopen(url, timeout=30) as response:
                 raw = response.read(1_000_001)
-            if len(raw) > 1_000_000 or digest(raw) != files[name]:
+            if len(raw) > 1_000_000 or digest(raw, name) != files[name]:
                 raise ValueError('Shared source hash mismatch: ' + name)
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(raw)
     for name, content in manifest.get('binary_fixtures', {}).items():
         target = safe_target(name)
         raw = base64.b64decode(content, validate=True)
-        if len(raw) > 1_000_000 or digest(raw) != files[name]:
+        if len(raw) > 1_000_000 or digest(raw, name) != files[name]:
             raise ValueError('Fixture hash mismatch: ' + name)
         if not target.exists():
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -66,7 +70,7 @@ def main() -> None:
     errors = []
     for name, expected in files.items():
         target = safe_target(name)
-        if not target.is_file() or digest(target.read_bytes()) != expected:
+        if not target.is_file() or digest(target.read_bytes(), name) != expected:
             errors.append(name)
     if errors:
         raise ValueError('Source verification failed: ' + ', '.join(errors))
