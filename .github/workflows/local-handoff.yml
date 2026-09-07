@@ -19,20 +19,26 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: danial-maqbool/LocalFlow-Studio
+          ref: 31736c609b43144531329879593bb16c2abf5348
+          path: _handoff-source
+          persist-credentials: false
       - name: Apply reviewed source and documentation changes
         id: source
         shell: bash
         run: |
           python - <<'PYTHON'
           from pathlib import Path
-          import hashlib, json, lzma, os, shutil, subprocess
+          import hashlib, json, lzma, os, re, shutil, subprocess
           root = Path('_handoff-source') if Path('_handoff-source').is_dir() else Path('.')
           raw = b''.join((root / n).read_bytes() for n in ['.local-handoff.1.bin', '.local-handoff.2.bin'])
           if hashlib.sha256(raw).hexdigest() != '6af42bcf52a8871052e4de2929a3ea7a7463587731e31bf9af033f37c4d42ab6':
               raise SystemExit('Reviewed source bundle hash mismatch.')
           patches = json.loads(lzma.decompress(raw))
           name = os.environ['GITHUB_REPOSITORY'].split('/', 1)[1]
-          patch = patches[name].encode('utf-8')
+          patch = ''.join(part for part in re.split(r'(?=^diff --git )', patches[name], flags=re.M) if not part.startswith('diff --git a/.github/')).encode('utf-8')
           subprocess.run(['git', 'apply', '--check', '-'], input=patch, check=True)
           subprocess.run(['git', 'apply', '-'], input=patch, check=True)
           m = json.loads(Path('source-manifest.json').read_text(encoding='utf-8'))
@@ -44,7 +50,7 @@ jobs:
                   data = data.replace(b'\r\n', b'\n')
               m['files'][name] = hashlib.sha256(data).hexdigest()
           Path('source-manifest.json').write_text(json.dumps(m, indent=2, sort_keys=True) + '\n', encoding='utf-8')
-          for name in ['.local-handoff.1.bin', '.local-handoff.2.bin', '.github/workflows/local-handoff.yml']:
+          for name in ['.local-handoff.1.bin', '.local-handoff.2.bin']:
               Path(name).unlink(missing_ok=True)
           if root.name == '_handoff-source':
               shutil.rmtree(root)
