@@ -1,0 +1,9 @@
+[project]
+name = "localflow-studio"
+version = "0.1.0"
+description = "A fully local file workflow builder"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[tool.unittest]
+start-directory = "tests"

@@ -1,0 +1,3 @@
+Invoice ID: INV-2026-002
+Vendor: Cedar Office
+Total: 84.00
