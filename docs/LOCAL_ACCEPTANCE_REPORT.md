@@ -1,104 +1,65 @@
-# LocalFlow-Studio: local acceptance report
+# LocalFlow-Studio: current local acceptance report
 
-Status: PARTIAL. New evidence from this PC, not the committed release reports.
+Status: BLOCKED. Required Windows permissions/session gates remain. This is not full local acceptance.
 
-Repository: https://github.com/danial-maqbool/LocalFlow-Studio
-Initial commit: `fa371c5585c44e3460883f43fa9be89a8e5b183b`.
-Tested source commit: `d2a57a348336098589b71eef098ce7ffb3e14875`. Source tree was clean for the final source checks; empty uncommitted diff SHA-256: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`. Subsequent report-only edits are listed in Git.
-Initial branch: `main`. Existing changes: none. Missing repository cloned as a sibling.
-Validation branch: `local-validation/20260907-acceptance-01`.
-OS and architecture: Windows 11 Home build 26200, AMD64. Python 3.14.3, independent project-local `.venv`.
-Native tools: Tesseract 5.4.0.20240606, eng and osd; FFmpeg/ffprobe 8.1.2; Playwright 1.57.0, Chromium 143.0.7499.4.
-Run date: 2026-09-07, Asia/Karachi. About 412 GB free at initial inspection.
-Resolved runtime requirements: `runtime/freeze.log`; development versions in `development/freeze.log` or `development-early/freeze.log`.
-All evidence paths below are relative to ignored `artifacts/local-qa/20260907-acceptance-01/`.
+Run date: 2026-09-08, Asia/Karachi.
+Tested current main commit: `fe967ab18f09e2e63f141d84af72633088071bd3`.
+Starting state: main, clean, correct danial-maqbool origin. Fetch and fast-forward pull completed without discarding changes.
+Working source diff at test time: empty; SHA-256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
+Environment: Windows 11 Home build 26200, AMD64; project-local Python 3.14.3. Tesseract 5.4.0.20240606 with eng/osd; Poppler pdftoppm 26.07.0. Browser engine 143.0.7499.4.
+Current evidence root: ignored `artifacts/local-qa/20260908-final-acceptance-01/`.
+Earlier evidence root: ignored `artifacts/local-qa/20260907-acceptance-01/`.
+The [previous acceptance report](history/LOCAL_ACCEPTANCE_20260907.md) is preserved verbatim. Earlier failures and blocked checks remain historical evidence.
 
-## Results
+## Current and retained checks
 
-| Gate or case ID | Status | Command and exit code | Evidence path | Notes |
-| :--- | :--- | :--- | :--- | :--- |
-| Runtime-only install | PASS | Bootstrap, preflight, pip check, sample: 0 | `runtime/bootstrap.log`, `runtime/` | Sample before dev tools. |
-| Direct package and native checks | PASS | Dev bootstrap, native preflight, pip check: 0 | `development/`, `development-early/`, `normal-launcher-doctor.log` | Own interpreter per repo. |
-| Full Windows suite | BLOCKED | `verify.py --strict`: 1 | `final-suite/test-report.json` | 137 run, 134 passed, 3 skipped, 0 failures/errors. Strict gate does not pass. |
-| Direct-browser checks | PASS | `browser_check.py --slow-api --record`: 0 | `final-browser/` | 27 checks, real loopback backend/downloads. |
-| Interaction | PASS | `browser_interaction_check.py`: 0 | `final-interaction/` | Real UI job module, progress, cancellation, navigation and Escape dialog. |
-| Offline runtime | PASS | Network-disabled Docker: 0 | `offline-02/` | Linux container on this PC: 137 run, 137 passed, 0 skipped, 27 browser checks. |
-| Encryption and restore | PASS | Acceptance runner and suite | `final-acceptance/results.json` | Unique persistent synthetic data directory. |
-| Clean clone/setup | PASS | Clone main, bootstrap, launcher: 0 | `initial-state.json`, runtime logs | No older ZIP or cross-project runtime dependency. |
-| Missing native dependency | PASS | Process-local empty PATH OCR request: 0 | `missing-native/result.json` | Clear OCR/Tesseract error. |
-| Windows source/vault symlink | BLOCKED | Strict-suite skips | Suite report | Account cannot create symlinks; isolated Linux checks pass. |
-| POSIX ciphertext mode on Windows | NOT APPLICABLE | Platform skip | Suite report | Executed in Linux container. |
-| LF-01 | PASS | Commands below and evidence logs | `final-acceptance/results.json` | Preview writes no exports; CSV fields and copied bytes match source fixtures. |
-| LF-02 | PASS | Commands below and evidence logs | `final-suite/verify.log; final-interaction` | All non-desktop nodes, cycles, missing nodes, invalid edges, paths, bounded parsers, cancellation and navigation. Desktop execution is LF-07. |
-| LF-03 | PASS | Commands below and evidence logs | `final-acceptance/results.json; final-suite; missing-native` | Image, scanned/mixed PDF OCR, ruled/borderless tables, configured columns, known values and missing language. |
-| LF-04 | PASS | Commands below and evidence logs | `final-acceptance/results.json; offline-02/strict` | LSA ran on larger corpus; small corpus used TF-IDF. Source-sentence summaries and unknown queries checked offline. Neither backend is neural. |
-| LF-05 | PASS | Commands below and evidence logs | `worker-01/worker-report.json; final-suite` | Separate encrypted worker restart, enabled/disabled triggers and interrupted-job records. This is not logout/login. |
-| LF-06 | BLOCKED | Commands below and evidence logs | `Disposable session not supplied` | Native service installation, terminal closure, logout/login, watched event, pause, uninstall and credential removal require a disposable Windows session. |
-| LF-07 | BLOCKED | Commands below and evidence logs | `final-suite; native desktop not run` | Unit checks cover preview, token binding/expiry/reuse, consent, fail-safe and worker rejection. Actual input/focus changes require a disposable desktop. |
-| LF-08 | PASS | Commands below and evidence logs | `final-acceptance/results.json; final-suite` | Encrypted persistence, backup restore, wrong password, copied legacy migration, altered ciphertext, failed writes and concurrent writers. |
+| Gate | Status | Executions and evidence |
+| :--- | :--- | :--- |
+| Starting Git state | PASS | `starting-state.json`, `fetch-pull.log`, `tested-source.txt`; main only is the final branch policy. |
+| Windows source/vault symlinks | BLOCKED | Fresh disposable-directory creation probe returns WinError 1314. Exact existing tests: 2 run, 0 passed, 2 skipped, 0 failures/errors. `windows-symlinks/result.json`, `windows-symlinks/tests.log`. |
+| Windows POSIX ciphertext mode | NOT APPLICABLE | POSIX mode assertions do not apply to Windows. It is not an application failure. |
+| Full regression suite | PASS | Retained 2026-09-07 evidence: 137 executions, 134 passed, 0 failures/errors, 3 skipped. Prior `--strict` exited 1 because of skips; no fresh full-suite claim. Earlier `final-suite/test-report.json`. |
+| Browser | PASS | Retained 2026-09-07 direct-browser evidence: 27 checks. Earlier `final-browser/browser-report.json`; not rerun. |
+| Runtime unchanged | PASS | Compared current main with previously tested source `d2a57a348336098589b71eef098ce7ffb3e14875`. Only report/handoff/manifest files differ. `changes-since-tested-source.txt`. No reason to repeat installation or complete feature suites. |
 
-### Commands and evidence interpretation
+## Project acceptance cases
 
-Run in the repository root. Replace `<new-dir>` with a new ignored run directory. Preserve all failed evidence.
+PASS cases carried from the previous report remain supported by their original dated evidence. Native blockers were reassessed this run.
 
-```powershell
-py -3 bootstrap.py
-.\.venv\Scripts\python.exe scripts/preflight.py --report-dir <new-dir>
-.\.venv\Scripts\python.exe -m pip check
-.\start.bat --demo --no-browser --port 0
-py -3 bootstrap.py --dev
-.\.venv\Scripts\python.exe scripts/preflight.py --tests --require-native --report-dir <new-dir>
-.\.venv\Scripts\python.exe -m pip freeze
-.\.venv\Scripts\python.exe scripts/verify.py --strict --report-dir <new-dir>
-.\.venv\Scripts\python.exe scripts/browser_check.py --slow-api --record --report-dir <new-dir>
-.\.venv\Scripts\python.exe scripts/acceptance_check.py --report-dir <new-dir>
-.\.venv\Scripts\python.exe scripts/browser_interaction_check.py --report-dir <new-dir>
-```
+| Case | Status | Findings | Evidence |
+| :--- | :--- | :--- | :--- |
+| LF-01 | PASS | Preview writes no exports; CSV fields and copied bytes match source fixtures. | Earlier report/evidence: `final-acceptance/results.json` |
+| LF-02 | PASS | All non-desktop nodes, cycles, missing nodes, invalid edges, paths, bounded parsers, cancellation and navigation. Desktop execution is LF-07. | Earlier report/evidence: `final-suite/verify.log; final-interaction` |
+| LF-03 | PASS | Image, scanned/mixed PDF OCR, ruled/borderless tables, configured columns, known values and missing language. | Earlier report/evidence: `final-acceptance/results.json; final-suite; missing-native` |
+| LF-04 | PASS | LSA ran on larger corpus; small corpus used TF-IDF. Source-sentence summaries and unknown queries checked offline. Neither backend is neural. | Earlier report/evidence: `final-acceptance/results.json; offline-02/strict` |
+| LF-05 | PASS | Separate encrypted worker restart, enabled/disabled triggers and interrupted-job records. This is not logout/login. | Earlier report/evidence: `worker-01/worker-report.json; final-suite` |
+| LF-06 | BLOCKED | Native service installation, terminal closure, logout/login, watched event, pause, uninstall and credential removal require a disposable Windows session. | Current: `User confirmed no disposable Windows session is available` |
+| LF-07 | BLOCKED | Unit checks cover preview, token binding/expiry/reuse, consent, fail-safe and worker rejection. Actual input/focus changes require a disposable desktop. | Current: `User confirmed no disposable Windows session is available` |
+| LF-08 | PASS | Encrypted persistence, backup restore, wrong password, copied legacy migration, altered ciphertext, failed writes and concurrent writers. | Earlier report/evidence: `final-acceptance/results.json; final-suite` |
 
-Command JSON beside logs records exact arguments, exit codes, start times and durations. Preflight, suite, browser and worker reports use separate directories. Late `runtime/` reruns outside LocalFlow occurred after development installation; the initial `runtime-early/` evidence is the valid runtime-only proof.
+## Defects, regression tests and verification scope
 
-Browser evidence covers light/dark themes, narrow/wide layouts, navigation, visible keyboard focus, real downloads and parsed bytes. All acceptance uses direct loopback navigation. Interaction checks invoke the real UI job module and backend; they do not prove every physical keyboard/device or OS adapter.
+No application defect required a source-code change during this run. No application regression test was added by this run. No assertion, encryption, consent, source protection or parser limit was weakened. No shared localdesk file changed.
 
-The bounded sample took 1.716 seconds, with 33030144 bytes peak working set in the actual in-process Python test interpreter. This includes test imports and excludes native child workers and interpreter startup. It is not a whole-application benchmark. See `performance-02/performance.json`. The earlier `performance/` measured the Windows venv launcher and is not a valid application-memory measurement.
+## Native Windows blockers
 
-### Offline evidence
+The user explicitly confirmed that no disposable Windows session is available. No login task, credential-store write, desktop input or window-title capture was attempted on the personal session. Process-restart evidence from the earlier run is not logout/login evidence.
+A fresh symlink probe ran only inside disposable synthetic directories. Windows returned error 1314, a required privilege is not held. Both existing source/vault tests were invoked; their skips remain BLOCKED, not PASS. No machine-wide security configuration was changed.
 
-Setup downloads preceded isolation. An unprivileged Linux container used Docker `--network none`, read-only source and a writable synthetic evidence mount, with bounded CPU/memory/process limits. A reserved-address probe failed with ENETUNREACH. `strace -f` observed backend tests and browser/backend processes. Backend destinations were loopback only. Chromium DNS attempts to the container resolver failed with ENETUNREACH. No successful outbound runtime connection was observed. Browser-only assertions were not used as backend proof. No host firewall change or neural model download.
+## Commands and evidence
 
-The first container attempt lacked a named account/home for its numeric UID and browser profile. Those environment failures remain in `offline-01/`. The corrected image has a real unprivileged user/home. Container success is not Windows native-session acceptance.
+Exact command arguments, start times, exits and durations are in `*.command.json`; native/interpreter versions are in `environment.log`. Raw paths, logs, vaults and synthetic outputs stay ignored. No personal documents, browser databases, credentials or screenshots were used. Only owned test processes were stopped.
 
-## Defects and regression tests
+Source-manifest verification follows review of report-only changes and is recorded in `final-manifest.log`. Runtime-only installation and prior offline runs are retained evidence and were not repeated. No new network-isolation result is claimed for this run.
 
-1. Windows checkout line endings caused false source-manifest failures. `scripts/materialize.py` now canonicalizes CRLF only for recognized text without NUL bytes. Binary hashes remain exact. Two `tests/test_manifest.py` regressions cover text and binary content. The text regression failed before the fix and passed after it. Manifest hashes were refreshed after source review.
-2. The browser checker could inspect state before a pending POST finished. API-request tracking and a quiet interval now gate assertions. Real delayed-API browser runs retain feature assertions. Saved downloads are compared with authenticated backend bytes and parsed. An initial attachment-response-body comparison was a harness error; that failed evidence remains.
-3. Project-local acceptance and interaction scripts retain fixtures, outputs and hashes. Vendored localdesk copies were compared; no shared runtime module or project-specific runtime behavior was replaced.
+GitHub final main workflow results are recorded after the report push in the workspace five-project summary and ignored `final-ci.json`; remote CI does not replace local Windows permissions. No queued or running job is called a pass.
 
-## Skips and blocked checks
+## Exact remaining user actions
 
-- `tests.test_safety.SafetyTests.test_symlink_input_is_rejected`: This OS account cannot create symbolic links.
-- `tests.test_vault.VaultTests.test_ciphertext_file_permissions`: POSIX mode test.
-- `tests.test_vault.VaultTests.test_vault_symlink_is_rejected`: Creating symbolic links may need a Windows developer setting.
-
-Native login tasks, OS keyring persistence and title/input adapters were not exercised in the active profile. Unit/mock adapter checks are not native acceptance. Optional neural models were NOT RUN by design; automatic downloads were prohibited and the built-in statistical backend was tested.
-
-## Source and output safety
-
-Only synthetic documents and browser databases were used. Origins, initial commits and clean status were recorded. Acceptance fixtures and outputs have hashes; browser download evidence records saved byte hashes. Historical release reports, screenshots and GIFs were preserved. Vaults, passphrases, exports, caches, raw logs and private absolute paths are not committed.
-
-Only owned launchers, backends, browser contexts, containers and Office instances were stopped. No personal Office document or browser history was read. No login service or saved OS credential was created. Existing Tesseract was added to user PATH with the previous value retained locally; new terminals inherit it. No machine-wide PATH or global firewall/security setting was changed.
-
-README commands and relative documentation links were checked: no broken local targets or README em dashes. Each app remains independently installable. Staged changes were checked for secrets/private paths before normal branch pushes. GitHub CI is separate evidence; the five-project summary records exact pushed heads and checks.
-
-## User actions
-
-1. Provide a disposable Windows profile/session with permission to create symbolic links, then rerun both skipped symlink tests and the strict suite there. No global security setting was changed.
-2. In an isolated Windows session, install the documented login service, close the terminal, log out/in, create a synthetic watched file, verify output, pause/restart, uninstall and verify test-created credentials are removed. Enter any synthetic passphrase locally, never in chat.
-3. Give explicit local consent inside that disposable desktop for synthetic input or window-title capture; test focus/exclusion, pause, exit, restart and confirmation rules there.
-
-## Source CI
-
-PASS: [Tests workflow](https://github.com/danial-maqbool/LocalFlow-Studio/actions/runs/34131855495) at `d2a57a348336098589b71eef098ce7ffb3e14875`. This is remote CI, separate from local acceptance.
+1. Supply a disposable Windows environment with symbolic-link creation capability, then run the existing source and vault symlink rejection tests there. No global security setting was changed to obtain that capability.
+2. Supply a disposable Windows user/session for the documented per-user service: configure a synthetic watched folder and enabled monitoring, install with a locally entered synthetic passphrase, close the terminal, log out/in, verify a real watched event, pause/disable, restart and verify persisted state, uninstall, and check that only test-created task/credentials were removed.
+3. In the disposable desktop, explicitly enable and confirm the synthetic input test; verify preview, permission/confirmation expiry/reuse, mouse, keyboard, scrolling, supported screenshot action, focus, fail-safe, and background rejection. Do not use the active personal desktop.
 
 ## Decision
 
-PARTIAL. No claim that all applicable Windows acceptance gates passed. Automated and browser successes do not remove native-session blockers.
+Overall: BLOCKED by the native Windows capability/session requirements listed above. Other accepted project behavior retains its previous evidence; no new full acceptance claim is made.

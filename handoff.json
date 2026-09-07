@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "handoff_revision": 1,
-  "prepared_on": "2026-09-07",
+  "handoff_revision": 2,
+  "prepared_on": "2026-09-08",
   "repository": "danial-maqbool/LocalFlow-Studio",
   "application_version": "0.2.0",
   "historical_release_commit": "a42262279fef3a69f031fecfcdd54cabc78c682b",
-  "local_acceptance_status": "not_run",
+  "local_acceptance_status": "BLOCKED",
   "default_port": 8761,
   "read_first": [
     "AGENTS.md",
@@ -24,5 +24,9 @@
     "LF-07",
     "LF-08"
   ],
-  "note": "Historical test counts are not a new local acceptance result."
+  "note": "Current local acceptance is blocked by Windows symlink capability and a disposable native user/desktop session.",
+  "local_acceptance_report": "docs/LOCAL_ACCEPTANCE_REPORT.md",
+  "local_tested_commit": "fe967ab18f09e2e63f141d84af72633088071bd3",
+  "local_followup_run": "20260908-final-acceptance-01",
+  "branch_policy": "main only; no force-push; preserve tags"
 }
